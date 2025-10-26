@@ -1,5 +1,6 @@
-from sqlalchemy import Integer, String, ForeignKey, DateTime, func
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column
+from sqlalchemy import Integer, String, DateTime, func
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
+from app.models.category_model import CategoryModel
 
 Base = declarative_base()
 class ExpenseModel(Base):
@@ -13,3 +14,5 @@ class ExpenseModel(Base):
     expense_date: Mapped[DateTime] = mapped_column(DateTime(timezone=True), nullable=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+    category = relationship(CategoryModel, back_populates="expenses")

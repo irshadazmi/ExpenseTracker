@@ -1,5 +1,5 @@
 from sqlalchemy import String, Integer, Boolean, DateTime, func
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
 
 Base = declarative_base()
 
@@ -11,3 +11,5 @@ class CategoryModel(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+    expenses = relationship("ExpenseModel", back_populates="category")

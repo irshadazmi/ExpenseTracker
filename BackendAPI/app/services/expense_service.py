@@ -4,6 +4,13 @@ from app.utils.exceptions import FailedToCreateException, FailedToUpdateExceptio
 class ExpenseService:
     def __init__(self, expense_repository):
         self.expense_repository = expense_repository
+    
+    async def get_expenses_grouped_by_category(self):
+        return await self.expense_repository.get_expenses_grouped_by_category()
+
+    
+    async def get_category_wise_totals(self):
+        return await self.expense_repository.get_category_wise_totals()
 
     async def get_all_expenses(self, skip: int = 0, limit: int = 10):
         return await self.expense_repository.get_all_expenses(skip, limit)

@@ -52,3 +52,8 @@ class ExpenseResponseSchema(ExpenseBaseSchema):
     id: int
     created_at: datetime
     updated_at: Optional[datetime]
+
+class CategoryExpenseSummary(BaseModel):
+    category_id: int
+    category_name: str
+    total_amount: int

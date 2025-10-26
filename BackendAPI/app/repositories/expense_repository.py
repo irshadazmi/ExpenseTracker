@@ -1,4 +1,6 @@
-from sqlalchemy import select
+from sqlalchemy import func, select
+from sqlalchemy.orm import selectinload
+from app.models.category_model import CategoryModel
 from app.models.expense_model import ExpenseModel
 from app.schemas.expense_schema import ExpenseCreateSchema, ExpenseUpdateSchema
 from app.utils.exceptions import (
@@ -12,6 +14,48 @@ from app.utils.exceptions import (
 class ExpenseRepository:
     def __init__(self, db):
         self.db = db
+
+    async def get_expenses_grouped_by_category(self):
+        stmt = (
+            select(
+                ExpenseModel.id,
+                ExpenseModel.description,
+                ExpenseModel.amount,
+                ExpenseModel.expense_date,
+                CategoryModel.name.label("category_name")
+            )
+            .join(CategoryModel, CategoryModel.id == ExpenseModel.category_id)
+            .order_by(CategoryModel.name, ExpenseModel.expense_date)
+        )
+        result = await self.db.execute(stmt)
+        rows = result.all()
+
+        grouped = {}
+        for row in rows:
+            category = row.category_name
+            if category not in grouped:
+                grouped[category] = []
+            grouped[category].append({
+                "id": row.id,
+                "description": row.description,
+                "amount": float(row.amount),
+                "date": row.expense_date.strftime("%Y-%m-%d")
+            })
+
+        return [{"title": category, "data": expenses} for category, expenses in grouped.items()]
+
+    async def get_category_wise_totals(self):
+        stmt = (
+            select(
+                ExpenseModel.category_id,
+                CategoryModel.name.label("category_name"),
+                func.sum(ExpenseModel.amount).label("total_amount")
+            )
+            .join(CategoryModel, CategoryModel.id == ExpenseModel.category_id)
+            .group_by(ExpenseModel.category_id, CategoryModel.name)
+        )
+        result = await self.db.execute(stmt)
+        return result.all()
 
     async def get_all_expenses(self, skip: int = 0, limit: int = 10):
         result = await self.db.execute(select(ExpenseModel).offset(skip).limit(limit))

@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
 
   // Generic view block
   card: {
+    width: "90%", // adapts to screen width
     backgroundColor: '#F5F5F5',
     padding: 16,
     borderRadius: 8,
@@ -80,25 +81,24 @@ const styles = StyleSheet.create({
 
   // Grid styles
   gridContainer: {
-  flexDirection: "row",
-  flexWrap: "wrap",
-  justifyContent: "space-between",
-  padding: 8,
-},
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    padding: 8,
+  },
 
-gridItem: {
-  width: "48%", // two columns with spacing
-  backgroundColor: "#f9f9f9",
-  padding: 12,
-  marginBottom: 12,
-  borderRadius: 8,
-  elevation: 2, // for Android shadow
-  shadowColor: "#000",
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 4,
-},
-
+  gridItem: {
+    width: "48%", // two columns with spacing
+    backgroundColor: "#f9f9f9",
+    padding: 12,
+    marginBottom: 12,
+    borderRadius: 8,
+    elevation: 2, // for Android shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
 });
 
 export default styles;
